@@ -1,0 +1,8 @@
+{
+  "name": "neonx",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:rainy-me/neonx.git",
+  "author": "rainy-me <github@rainy.me>",
+  "license": "MIT"
+}
