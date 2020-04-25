@@ -60,17 +60,15 @@ export function createTelepathy<S>(initialState: S, name: string = 'telepathy'):
  * @param initialState initialState to maintain
  * @param name for custom event default to 'telepathy'
  *
- * returns `set` and `select` function to create reducer and selector
+ * returns `set` and `select` function to create reducer and selector hook
  *
  * @example
  * ```
- * const { telepathy, select, set } = createTelepathyChannel({ id: 1, name: 'Newton' });
+ * const { telepathy, set } = createTelepathyChannel({ id: 1, name: 'Newton' });
  * const updateName = set((state, payload: string) => ({ ...state, name: payload }));
- * const selectId = select((state) => state.id);
  *
  * updateName('Einstein');
  * console.log(telepathy.state); // { id: 1, name: 'Einstein' }
- * console.log(selectId()); // 1
  * ```
  */
 export function createTelepathyChannel<S>(initialState: S, name: string = 'telepathy') {
