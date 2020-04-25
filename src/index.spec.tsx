@@ -16,26 +16,32 @@ describe('telepathy', () => {
   });
 
   it('creates TelepathyChannel', () => {
-    const { telepathy, select, set } = createTelepathyChannel(0);
+    const { telepathy, set } = createTelepathyChannel(0);
     const updateTo = set();
-    const selectState = select();
 
     expect(telepathy.state).toBe(0);
-    expect(selectState()).toBe(0);
-
     updateTo(1);
     expect(telepathy.state).toBe(1);
-    expect(selectState()).toBe(1);
   });
 
-  it('creates TelepathyChannel reducer and selector', () => {
-    const { telepathy, select, set } = createTelepathyChannel({ id: 1, name: 'Newton' });
+  it('creates TelepathyChannel reducer', () => {
+    const { telepathy, set } = createTelepathyChannel({ id: 1, name: 'Newton' });
     const updateName = set((state, payload: string) => ({ ...state, name: payload }));
-    const selectId = select((state) => state.id);
-
     updateName('Einstein');
     expect(telepathy.state).toStrictEqual({ id: 1, name: 'Einstein' });
-    expect(selectId()).toBe(1);
+  });
+
+  it('creates select hook', () => {
+    const { select, set } = createTelepathyChannel({ count: 0, id: 1 });
+    const setCount = set((state, count: number) => ({ ...state, count }));
+    const selectCount = select((state) => state.count);
+
+    const { result } = renderHook(() => selectCount());
+    expect(result.current).toBe(0);
+    act(() => {
+      setCount(1);
+    });
+    expect(result.current).toBe(1);
   });
 });
 

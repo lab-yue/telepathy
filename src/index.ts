@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 export type Reducer<S, P = any> = (state: S, payload: P) => S;
 export type Selector<S, T = S> = (s: S) => T;
 
-export const basicSelector = <S, T>(s: S) => (s as any) as T;
+export const basicSelector = <S>(s: S): S => s;
 export const basicReducer = <S>(_: S, payload: S): S => payload;
 export const mergeReducer = <S>(s: S, payload: Partial<S>): S => ({ ...s, ...payload });
 
@@ -80,7 +80,8 @@ export function createTelepathyChannel<S>(initialState: S, name: string = 'telep
     return (payload: P) => telepathy.next(reducer(telepathy.state, payload));
   };
 
-  const select = <T = S>(selector: Selector<S, T> = basicSelector) => () => selector(telepathy.state);
+  const select = <T = S>(selector: Selector<S, T> = basicSelector as Selector<S, T>) => () =>
+    useTelepathy(telepathy, selector);
 
   return { telepathy, set, select };
 }
@@ -113,7 +114,10 @@ export function createTelepathyChannel<S>(initialState: S, name: string = 'telep
  * };
  * ```
  */
-export function useTelepathy<S, T>(telepathy: Telepathy<S>, selector: Selector<S, T> = basicSelector) {
+export function useTelepathy<S, T = S>(
+  telepathy: Telepathy<S>,
+  selector: Selector<S, T> = basicSelector as Selector<S, T>
+) {
   const [value, setValue] = useState<T>(selector(telepathy.state));
 
   useEffect(() => {
